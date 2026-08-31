@@ -6,7 +6,7 @@
 ![Storage](https://img.shields.io/badge/storage-Delta%20Lake%20%2F%20OneLake-00ADD8)
 ![Serving](https://img.shields.io/badge/serving-Direct%20Lake%20%2B%20Power%20BI-F2C811?logo=powerbi&logoColor=black)
 [![CI](https://github.com/Vijayreddymettu/fabric-insurance-medallion/actions/workflows/ci.yml/badge.svg)](https://github.com/Vijayreddymettu/fabric-insurance-medallion/actions/workflows/ci.yml)
-![License](https://img.shields.io/badge/license-MIT-green)
+![License](https://img.shields.io/badge/license-All%20Rights%20Reserved-red)
 
 End-to-end insurance data engineering and analytics platform built with **Microsoft Fabric**, implementing a production-oriented **Bronze → Silver → Gold Medallion Architecture**: incremental processing, Delta Lake, data-quality controls, dimensional modeling, Direct Lake semantic modeling, DAX analytics, row-level security, pipeline orchestration, operational monitoring, and Power BI reporting.
 
@@ -915,4 +915,8 @@ A concise memory pattern for interviews is:
 
 ## License
 
-Released under the [MIT License](LICENSE).
+**All Rights Reserved © Vijay Mettu**
+
+In plain English: this code is public so you can read it and see how it's built,
+but you don't have permission to copy, modify, deploy, or sell it — for that, ask
+first. See [LICENSE](LICENSE) for the full terms.
