@@ -1,0 +1,27 @@
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+~$*
+*~
+
+# Python
+__pycache__/
+*.pyc
+
+# Temporary/export files
+*.zip
+*.tmp
+*.log
+
+# Secrets
+.env
+.env.*
+credentials.json
+secrets.json
+*.key
+*.pem
+
+# Local Fabric/Power BI temp files
+*.pbit.cache

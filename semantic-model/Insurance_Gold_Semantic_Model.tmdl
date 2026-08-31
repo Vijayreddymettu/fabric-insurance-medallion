@@ -1,0 +1,1382 @@
+
+createOrReplace
+
+	model Model
+		culture: en-US
+		defaultPowerBIDataSourceVersion: powerBI_V3
+		sourceQueryCulture: en-US
+		dataAccessOptions
+			legacyRedirects
+			returnErrorValuesAsNull
+
+		table dim_date
+			lineageTag: d82cf64b-4427-4a8e-9f1e-3b4ae51bab00
+			sourceLineageTag: [dbo].[dim_date]
+			dataCategory: Time
+
+			column date_key
+				dataType: int64
+				formatString: 0
+				lineageTag: 41ab48c1-0710-416c-b862-a74e8a38247f
+				sourceLineageTag: date_key
+				summarizeBy: none
+				sourceColumn: date_key
+
+				annotation SummarizationSetBy = Automatic
+
+			column full_date
+				dataType: dateTime
+				isKey
+				formatString: General Date
+				lineageTag: 5ef5581b-2c5e-4ad6-a51c-cc3dc4b3b60e
+				sourceLineageTag: full_date
+				summarizeBy: none
+				sourceColumn: full_date
+
+				annotation SummarizationSetBy = Automatic
+
+			column year
+				dataType: int64
+				formatString: 0
+				lineageTag: 17a608a3-4dde-423f-b241-3c19c7bd6e41
+				sourceLineageTag: year
+				summarizeBy: sum
+				sourceColumn: year
+
+				annotation SummarizationSetBy = Automatic
+
+			column quarter
+				dataType: int64
+				formatString: 0
+				lineageTag: cfc99b18-d22e-463e-86a6-76e590eaef58
+				sourceLineageTag: quarter
+				summarizeBy: sum
+				sourceColumn: quarter
+
+				annotation SummarizationSetBy = Automatic
+
+			column quarter_name
+				dataType: string
+				lineageTag: 391d9168-badd-4553-b692-0fb35f9ccfdc
+				sourceLineageTag: quarter_name
+				summarizeBy: none
+				sourceColumn: quarter_name
+
+				annotation SummarizationSetBy = Automatic
+
+			column month_number
+				dataType: int64
+				formatString: 0
+				lineageTag: 0596e866-13b9-46ca-87e0-b1490708dd8d
+				sourceLineageTag: month_number
+				summarizeBy: sum
+				sourceColumn: month_number
+
+				annotation SummarizationSetBy = Automatic
+
+			column month_name
+				dataType: string
+				lineageTag: 1b30368a-59b2-4ca4-ba9b-21a7638eaa4d
+				sourceLineageTag: month_name
+				summarizeBy: none
+				sourceColumn: month_name
+
+				annotation SummarizationSetBy = Automatic
+
+			column year_month
+				dataType: string
+				lineageTag: cd2c74a7-a5ed-40f5-98e0-fcfc8e8e4cfe
+				sourceLineageTag: year_month
+				summarizeBy: none
+				sourceColumn: year_month
+
+				annotation SummarizationSetBy = Automatic
+
+			column day_of_month
+				dataType: int64
+				formatString: 0
+				lineageTag: 5560fbe7-5a68-436f-9514-8c65e881e6d6
+				sourceLineageTag: day_of_month
+				summarizeBy: sum
+				sourceColumn: day_of_month
+
+				annotation SummarizationSetBy = Automatic
+
+			column day_of_week_number
+				dataType: int64
+				formatString: 0
+				lineageTag: 4c787316-7a3b-4daf-9f83-51180bc2828b
+				sourceLineageTag: day_of_week_number
+				summarizeBy: sum
+				sourceColumn: day_of_week_number
+
+				annotation SummarizationSetBy = Automatic
+
+			column day_name
+				dataType: string
+				lineageTag: 4adf80a4-1250-4d79-8c95-8ac8f06da235
+				sourceLineageTag: day_name
+				summarizeBy: none
+				sourceColumn: day_name
+
+				annotation SummarizationSetBy = Automatic
+
+			column week_of_year
+				dataType: int64
+				formatString: 0
+				lineageTag: 706917d4-dbcb-4b3c-885e-fc84c78f6a3d
+				sourceLineageTag: week_of_year
+				summarizeBy: sum
+				sourceColumn: week_of_year
+
+				annotation SummarizationSetBy = Automatic
+
+			column is_weekend
+				dataType: boolean
+				formatString: """TRUE"";""TRUE"";""FALSE"""
+				lineageTag: 4032aae3-90aa-4368-bb10-ceddd5e39799
+				sourceLineageTag: is_weekend
+				summarizeBy: none
+				sourceColumn: is_weekend
+
+				annotation SummarizationSetBy = Automatic
+
+			column _gold_processed_ts
+				dataType: dateTime
+				formatString: General Date
+				lineageTag: 0a44ba08-9107-4da2-b761-87ed9a50e988
+				sourceLineageTag: _gold_processed_ts
+				summarizeBy: none
+				sourceColumn: _gold_processed_ts
+
+				annotation SummarizationSetBy = Automatic
+
+			partition dim_date = entity
+				mode: directLake
+				source
+					entityName: dim_date
+					schemaName: dbo
+					expressionSource: 'DirectLake - LH_Gold'
+
+		table fact_payment
+			lineageTag: 7379bc33-d03b-4f9b-b6ec-1f08b8db1094
+			sourceLineageTag: [dbo].[fact_payment]
+
+			measure 'Total Payments' =
+					
+					SUM ( fact_payment[payment_amount] )
+				formatString: #,0.00
+				displayFolder: Payments
+				lineageTag: 987f164a-d0f3-469c-b028-cff612cac94a
+
+				changedProperty = Name
+
+				changedProperty = FormatString
+
+				changedProperty = DisplayFolder
+
+			measure 'Payment Count' =
+					
+					DISTINCTCOUNT ( fact_payment[payment_id] )
+				formatString: #,0
+				displayFolder: Payments
+				lineageTag: f80bd82a-9db3-4346-b8d9-5a333c93bf7c
+
+				changedProperty = Name
+
+				changedProperty = FormatString
+
+				changedProperty = DisplayFolder
+
+			measure 'Average Payment Amount' =
+					
+					AVERAGE ( fact_payment[payment_amount] )
+				formatString: #,0.00
+				displayFolder: Payments
+				lineageTag: b4c3aea5-88a1-4fe5-8021-d1c2bba1654a
+
+				changedProperty = Name
+
+				changedProperty = FormatString
+
+				changedProperty = DisplayFolder
+
+			measure 'Paid-to-Claim Ratio' =
+					
+					DIVIDE (
+					    [Total Payments],
+					    [Total Claim Amount],
+					    0
+					)
+				formatString: 0.00%;-0.00%;0.00%
+				displayFolder: Payments
+				lineageTag: a38d202f-c1cd-456a-a818-63fec2e0ced9
+
+				changedProperty = Name
+
+				changedProperty = FormatString
+
+				changedProperty = DisplayFolder
+
+			measure 'Total Payments YTD' =
+					
+					TOTALYTD (
+					    [Total Payments],
+					    dim_date[full_date]
+					)
+				formatString: #,0.00
+				displayFolder: Time Intelligence
+				lineageTag: 3eeeb3c3-375c-493f-ab95-77b067394347
+
+				changedProperty = Name
+
+				changedProperty = FormatString
+
+				changedProperty = DisplayFolder
+
+			measure 'Total Payments PY' =
+					
+					CALCULATE (
+					    [Total Payments],
+					    SAMEPERIODLASTYEAR ( dim_date[full_date] )
+					)
+				formatString: #,0.00
+				displayFolder: Time Intelligence
+				lineageTag: 6ad2a8ea-f715-4158-aff5-8d2de5b890d0
+
+				changedProperty = Name
+
+				changedProperty = FormatString
+
+				changedProperty = DisplayFolder
+
+			measure 'Payment YoY %' =
+					
+					DIVIDE (
+					    [Total Payments] - [Total Payments PY],
+					    [Total Payments PY],
+					    0
+					)
+				formatString: 0.00%;-0.00%;0.00%
+				displayFolder: Time Intelligence
+				lineageTag: d0526e09-f9a7-481c-8373-b9b5aa3da734
+
+				changedProperty = Name
+
+				changedProperty = FormatString
+
+				changedProperty = DisplayFolder
+
+			measure 'Completed Payment Count' =
+					
+					CALCULATE (
+					    DISTINCTCOUNT ( fact_payment[payment_id] ),
+					    fact_payment[payment_status] = "COMPLETED"
+					)
+				formatString: #,0
+				displayFolder: Payments
+				lineageTag: 605a5735-8c29-4837-aec8-42d3593da684
+
+				changedProperty = Name
+
+				changedProperty = FormatString
+
+				changedProperty = DisplayFolder
+
+			measure 'Pending Payment Count' =
+					
+					CALCULATE (
+					    DISTINCTCOUNT ( fact_payment[payment_id] ),
+					    fact_payment[payment_status] = "PENDING"
+					)
+				formatString: #,0
+				displayFolder: Payments
+				lineageTag: 3c944f47-fce3-4ba2-b3b1-76d7baf509e3
+
+				changedProperty = Name
+
+				changedProperty = FormatString
+
+				changedProperty = DisplayFolder
+
+			column payment_key
+				dataType: int64
+				formatString: 0
+				lineageTag: 1dcc51e2-3cb5-48e3-974c-8715fec37614
+				sourceLineageTag: payment_key
+				summarizeBy: sum
+				sourceColumn: payment_key
+
+				annotation SummarizationSetBy = Automatic
+
+			column payment_id
+				dataType: string
+				lineageTag: d3ee8389-b968-4152-b5f4-9908144aefc7
+				sourceLineageTag: payment_id
+				summarizeBy: none
+				sourceColumn: payment_id
+
+				annotation SummarizationSetBy = Automatic
+
+			column policy_key
+				dataType: int64
+				formatString: 0
+				lineageTag: 79dc0fd7-295b-41ba-a2bf-f5b61f8fcc52
+				sourceLineageTag: policy_key
+				summarizeBy: none
+				sourceColumn: policy_key
+
+				annotation SummarizationSetBy = Automatic
+
+			column policy_id
+				dataType: string
+				lineageTag: 44fc7929-8e92-41c9-b657-85429179a51e
+				sourceLineageTag: policy_id
+				summarizeBy: none
+				sourceColumn: policy_id
+
+				annotation SummarizationSetBy = Automatic
+
+			column customer_key
+				dataType: int64
+				formatString: 0
+				lineageTag: cd2f66e8-561c-4124-aed7-78cc8ee30d1c
+				sourceLineageTag: customer_key
+				summarizeBy: sum
+				sourceColumn: customer_key
+
+				annotation SummarizationSetBy = Automatic
+
+			column customer_id
+				dataType: string
+				lineageTag: 5765f1de-2656-4ae3-b23c-42e1a4a2098a
+				sourceLineageTag: customer_id
+				summarizeBy: none
+				sourceColumn: customer_id
+
+				annotation SummarizationSetBy = Automatic
+
+			column claim_key
+				dataType: int64
+				formatString: 0
+				lineageTag: 9377132d-7978-4a15-8479-d113b6b9c158
+				sourceLineageTag: claim_key
+				summarizeBy: sum
+				sourceColumn: claim_key
+
+				annotation SummarizationSetBy = Automatic
+
+			column claim_id
+				dataType: string
+				lineageTag: a7ab223b-8d54-4b49-9c9c-39f7e9107cbe
+				sourceLineageTag: claim_id
+				summarizeBy: none
+				sourceColumn: claim_id
+
+				annotation SummarizationSetBy = Automatic
+
+			column payment_date
+				dataType: dateTime
+				formatString: General Date
+				lineageTag: 5f9715ff-1fee-4fc7-81bf-ba57f7ba2402
+				sourceLineageTag: payment_date
+				summarizeBy: none
+				sourceColumn: payment_date
+
+				annotation SummarizationSetBy = Automatic
+
+			column payment_type
+				dataType: string
+				lineageTag: 94d12857-2984-46af-ba93-d77ebb851a91
+				sourceLineageTag: payment_type
+				summarizeBy: none
+				sourceColumn: payment_type
+
+				annotation SummarizationSetBy = Automatic
+
+			column payment_amount
+				dataType: double
+				lineageTag: 46128d72-08e4-407d-9f8f-bd147cb2c2c6
+				sourceLineageTag: payment_amount
+				summarizeBy: sum
+				sourceColumn: payment_amount
+
+				annotation SummarizationSetBy = Automatic
+
+				annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+			column payment_method
+				dataType: string
+				lineageTag: 3610930d-0f6a-4a6b-a733-b07efb53e926
+				sourceLineageTag: payment_method
+				summarizeBy: none
+				sourceColumn: payment_method
+
+				annotation SummarizationSetBy = Automatic
+
+			column payment_status
+				dataType: string
+				lineageTag: aebb2567-99ca-4b35-a667-99ac263eb5f9
+				sourceLineageTag: payment_status
+				summarizeBy: none
+				sourceColumn: payment_status
+
+				annotation SummarizationSetBy = Automatic
+
+			column transaction_reference
+				dataType: string
+				lineageTag: 0a45a7d0-19f8-4996-b593-f920e535122d
+				sourceLineageTag: transaction_reference
+				summarizeBy: none
+				sourceColumn: transaction_reference
+
+				annotation SummarizationSetBy = Automatic
+
+			column _gold_processed_ts
+				dataType: dateTime
+				isHidden
+				formatString: General Date
+				lineageTag: cb4d4909-98a5-488c-a6a3-2e195f78159e
+				sourceLineageTag: _gold_processed_ts
+				summarizeBy: none
+				sourceColumn: _gold_processed_ts
+
+				changedProperty = IsHidden
+
+				annotation SummarizationSetBy = Automatic
+
+			column payment_date_key
+				dataType: int64
+				formatString: 0
+				lineageTag: cc4d8c9b-4e13-4cd1-9dae-24d53ffa26eb
+				sourceLineageTag: payment_date_key
+				summarizeBy: none
+				sourceColumn: payment_date_key
+
+				annotation SummarizationSetBy = Automatic
+
+			partition fact_payment = entity
+				mode: directLake
+				source
+					entityName: fact_payment
+					schemaName: dbo
+					expressionSource: 'DirectLake - LH_Gold'
+
+		table fact_claim
+			lineageTag: bf5fdb66-4aec-4eb7-97c5-b526ebdd7668
+			sourceLineageTag: [dbo].[fact_claim]
+
+			measure 'Total Claim Amount' =
+					
+					SUM ( fact_claim[claim_amount] )
+				formatString: #,0.00
+				displayFolder: Claims
+				lineageTag: dde54412-2183-4393-8ba7-d8ce73936840
+
+				changedProperty = Name
+
+				changedProperty = FormatString
+
+				changedProperty = DisplayFolder
+
+			measure 'Total Approved Amount' =
+					
+					SUM ( fact_claim[approved_amount] )
+				formatString: #,0.00
+				displayFolder: Claims
+				lineageTag: da8dda15-5c54-43af-b0bf-79c8bf53d500
+
+				changedProperty = Name
+
+				changedProperty = FormatString
+
+				changedProperty = DisplayFolder
+
+			measure 'Claim Count' =
+					
+					DISTINCTCOUNT ( fact_claim[claim_id] )
+				formatString: #,0
+				displayFolder: Claims
+				lineageTag: 0e5071a0-79fd-41b2-8ab0-c38ce8a8a110
+
+				changedProperty = Name
+
+				changedProperty = FormatString
+
+				changedProperty = DisplayFolder
+
+			measure 'Approval Rate' =
+					
+					DIVIDE (
+					    [Total Approved Amount],
+					    [Total Claim Amount],
+					    0
+					)
+				formatString: 0.00%;-0.00%;0.00%
+				displayFolder: Claims
+				lineageTag: d06ee269-3e09-4186-8010-07d5bacbebf4
+
+				changedProperty = Name
+
+				changedProperty = FormatString
+
+				changedProperty = IsHidden
+
+				changedProperty = DisplayFolder
+
+			measure 'Average Claim Amount' =
+					
+					DIVIDE (
+					    [Total Claim Amount],
+					    [Claim Count],
+					    0
+					)
+				formatString: #,0.00
+				displayFolder: Claims
+				lineageTag: fc552a96-e1b1-46d7-8541-14ba70f2019e
+
+				changedProperty = Name
+
+				changedProperty = FormatString
+
+				changedProperty = DisplayFolder
+
+			measure 'Outstanding Claim Amount' =
+					
+					[Total Claim Amount] - [Total Approved Amount]
+				formatString: #,0.00
+				displayFolder: Claims
+				lineageTag: 212f6509-d691-4242-8d12-751e149c7349
+
+				changedProperty = Name
+
+				changedProperty = FormatString
+
+				changedProperty = DisplayFolder
+
+			measure 'Open Claim Count' =
+					
+					CALCULATE (
+					    DISTINCTCOUNT ( fact_claim[claim_id] ),
+					    fact_claim[claim_status] IN { "SUBMITTED", "UNDER REVIEW" }
+					)
+				formatString: #,0
+				displayFolder: Claims
+				lineageTag: 0dba4720-e0b5-412c-b490-c3b9d107ddc2
+
+				changedProperty = Name
+
+				changedProperty = FormatString
+
+				changedProperty = DisplayFolder
+
+			measure 'Closed Claim Count' =
+					
+					CALCULATE (
+					    COUNTROWS ( fact_claim ),
+					    fact_claim[claim_status] = "Closed"
+					)
+				formatString: #,0
+				displayFolder: Claims
+				lineageTag: 4c001609-a2d3-4d0c-a173-595c9e457674
+
+				changedProperty = Name
+
+				changedProperty = FormatString
+
+				changedProperty = DisplayFolder
+
+			measure 'Open Claim Amount' =
+					
+					CALCULATE (
+					    SUM ( fact_claim[claim_amount] ),
+					    fact_claim[claim_status] = "Open"
+					)
+				formatString: #,0.00
+				displayFolder: Claims
+				lineageTag: 28cc3ae6-b5b3-4f96-b48a-17c85a19920f
+
+				changedProperty = Name
+
+				changedProperty = FormatString
+
+				changedProperty = DisplayFolder
+
+			measure 'Closed Claim Amount' =
+					
+					CALCULATE (
+					    SUM ( fact_claim[claim_amount] ),
+					    fact_claim[claim_status] = "Closed"
+					)
+				formatString: #,0.00
+				displayFolder: Claims
+				lineageTag: 0c0388b3-1723-4622-ad3b-9ed29b8571f2
+
+				changedProperty = Name
+
+				changedProperty = FormatString
+
+				changedProperty = DisplayFolder
+
+			measure 'Outstanding Claim %' =
+					
+					DIVIDE (
+					    [Outstanding Claim Amount],
+					    [Total Claim Amount],
+					    0
+					)
+				formatString: 0.00%;-0.00%;0.00%
+				displayFolder: Claims
+				lineageTag: 5a6cd749-68ee-4354-9cca-d926c90bbd8c
+
+				changedProperty = Name
+
+				changedProperty = FormatString
+
+				changedProperty = DisplayFolder
+
+			measure 'Total Claim Amount YTD' =
+					
+					TOTALYTD (
+					    [Total Claim Amount],
+					    dim_date[full_date]
+					)
+				formatString: #,0.00
+				displayFolder: Time Intelligence
+				lineageTag: fd41e123-2b89-4a09-9f06-6f47c6a08b52
+
+				changedProperty = Name
+
+				changedProperty = FormatString
+
+				changedProperty = DisplayFolder
+
+			measure 'Total Claim Amount PY' =
+					
+					CALCULATE (
+					    [Total Claim Amount],
+					    SAMEPERIODLASTYEAR ( dim_date[full_date] )
+					)
+				formatString: #,0.00
+				displayFolder: Time Intelligence
+				lineageTag: afc89b06-9427-448a-8e77-f14d972527f3
+
+				changedProperty = Name
+
+				changedProperty = FormatString
+
+				changedProperty = DisplayFolder
+
+			measure 'Claim Amount YoY %' =
+					
+					DIVIDE (
+					    [Total Claim Amount] - [Total Claim Amount PY],
+					    [Total Claim Amount PY],
+					    0
+					)
+				formatString: 0.00%;-0.00%;0.00%
+				displayFolder: Time Intelligence
+				lineageTag: 08235a9b-9933-4a73-a880-0cd065e8385c
+
+				changedProperty = Name
+
+				changedProperty = FormatString
+
+				changedProperty = DisplayFolder
+
+			measure 'Claims per Customer' =
+					
+					DIVIDE (
+					    [Claim Count],
+					    [Customer Count],
+					    0
+					)
+				formatString: #,0.00
+				displayFolder: Claims
+				lineageTag: bfe4500f-de06-4ca3-bd1c-b61ebf0747cb
+
+				changedProperty = Name
+
+				changedProperty = FormatString
+
+				changedProperty = DisplayFolder
+
+			measure 'Approved Amount %' =
+					
+					DIVIDE (
+					    [Total Approved Amount],
+					    [Total Claim Amount],
+					    0
+					)
+				formatString: 0.00%;-0.00%;0.00%
+				displayFolder: Claims
+				lineageTag: 980fd339-b95b-4849-8087-a6c1762db200
+
+				changedProperty = Name
+
+				changedProperty = FormatString
+
+				changedProperty = DisplayFolder
+
+			measure 'Unapproved Amount %' =
+					
+					DIVIDE (
+					    SUM ( fact_claim[unapproved_amount] ),
+					    [Total Claim Amount],
+					    0
+					)
+				formatString: 0.00%;-0.00%;0.00%
+				displayFolder: Claims
+				lineageTag: a115967a-fd5e-4a3b-b8a3-31809425d1a4
+
+				changedProperty = Name
+
+				changedProperty = FormatString
+
+				changedProperty = DisplayFolder
+
+			column claim_key
+				dataType: int64
+				formatString: 0
+				lineageTag: 596a743f-d657-44d5-95f5-f45955111a0e
+				sourceLineageTag: claim_key
+				summarizeBy: sum
+				sourceColumn: claim_key
+
+				annotation SummarizationSetBy = Automatic
+
+			column claim_id
+				dataType: string
+				lineageTag: 46766337-e834-4290-97ec-079d225d31fd
+				sourceLineageTag: claim_id
+				summarizeBy: none
+				sourceColumn: claim_id
+
+				annotation SummarizationSetBy = Automatic
+
+			column policy_key
+				dataType: int64
+				formatString: 0
+				lineageTag: 9be01fef-6ee6-4411-981a-e2b971431358
+				sourceLineageTag: policy_key
+				summarizeBy: none
+				sourceColumn: policy_key
+
+				annotation SummarizationSetBy = Automatic
+
+			column policy_id
+				dataType: string
+				lineageTag: eac6af49-35fe-4fef-a0a0-da418fe033cb
+				sourceLineageTag: policy_id
+				summarizeBy: none
+				sourceColumn: policy_id
+
+				annotation SummarizationSetBy = Automatic
+
+			column customer_key
+				dataType: int64
+				formatString: 0
+				lineageTag: 69d2ecae-4e64-45d3-9c12-d8fd15aeb396
+				sourceLineageTag: customer_key
+				summarizeBy: sum
+				sourceColumn: customer_key
+
+				annotation SummarizationSetBy = Automatic
+
+			column customer_id
+				dataType: string
+				lineageTag: c5067205-8138-422d-b5ef-fbbdc01cd422
+				sourceLineageTag: customer_id
+				summarizeBy: none
+				sourceColumn: customer_id
+
+				annotation SummarizationSetBy = Automatic
+
+			column claim_date
+				dataType: dateTime
+				formatString: General Date
+				lineageTag: d4522a1a-0e71-4aa8-9871-ad33655b1e20
+				sourceLineageTag: claim_date
+				summarizeBy: none
+				sourceColumn: claim_date
+
+				annotation SummarizationSetBy = Automatic
+
+			column incident_date
+				dataType: dateTime
+				formatString: General Date
+				lineageTag: 6c305ec9-39c5-4b0d-aa71-0e843d03c944
+				sourceLineageTag: incident_date
+				summarizeBy: none
+				sourceColumn: incident_date
+
+				annotation SummarizationSetBy = Automatic
+
+			column claim_type
+				dataType: string
+				lineageTag: c3749e06-e9de-409b-a734-aebe258d961e
+				sourceLineageTag: claim_type
+				summarizeBy: none
+				sourceColumn: claim_type
+
+				annotation SummarizationSetBy = Automatic
+
+			column claim_status
+				dataType: string
+				lineageTag: fdd8afd0-dab1-4fd4-ad7e-595d233c3051
+				sourceLineageTag: claim_status
+				summarizeBy: none
+				sourceColumn: claim_status
+
+				annotation SummarizationSetBy = Automatic
+
+			column claim_amount
+				dataType: double
+				lineageTag: 3cc0c0b8-a42a-4133-ac0a-22673054439d
+				sourceLineageTag: claim_amount
+				summarizeBy: sum
+				sourceColumn: claim_amount
+
+				annotation SummarizationSetBy = Automatic
+
+				annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+			column approved_amount
+				dataType: double
+				displayFolder: Claims
+				lineageTag: 566ee9f3-16f9-485f-9d1e-136b6ce4b6b5
+				sourceLineageTag: approved_amount
+				summarizeBy: sum
+				sourceColumn: approved_amount
+
+				changedProperty = DisplayFolder
+
+				annotation SummarizationSetBy = Automatic
+
+				annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+			column unapproved_amount
+				dataType: double
+				lineageTag: 45302a0e-b14c-4dad-a4ce-945d9f0125db
+				sourceLineageTag: unapproved_amount
+				summarizeBy: sum
+				sourceColumn: unapproved_amount
+
+				changedProperty = DisplayFolder
+
+				annotation SummarizationSetBy = Automatic
+
+				annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+			column approval_percentage
+				dataType: double
+				lineageTag: 3d6fed72-97dd-44ff-b7c7-e093c09d5ee8
+				sourceLineageTag: approval_percentage
+				summarizeBy: sum
+				sourceColumn: approval_percentage
+
+				annotation SummarizationSetBy = Automatic
+
+				annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+			column description
+				dataType: string
+				lineageTag: 4868bb68-1fd1-47b3-91e6-9796b520736c
+				sourceLineageTag: description
+				summarizeBy: none
+				sourceColumn: description
+
+				annotation SummarizationSetBy = Automatic
+
+			column reported_channel
+				dataType: string
+				lineageTag: 92b7eda7-2da7-42f4-8f6b-78683a18b49e
+				sourceLineageTag: reported_channel
+				summarizeBy: none
+				sourceColumn: reported_channel
+
+				annotation SummarizationSetBy = Automatic
+
+			column adjuster_id
+				dataType: string
+				lineageTag: 3e0fe93a-4932-405b-91d3-fb5037958337
+				sourceLineageTag: adjuster_id
+				summarizeBy: none
+				sourceColumn: adjuster_id
+
+				annotation SummarizationSetBy = Automatic
+
+			column _gold_processed_ts
+				dataType: dateTime
+				formatString: General Date
+				lineageTag: 1b0c8745-0e36-41ed-872a-d572745ff889
+				sourceLineageTag: _gold_processed_ts
+				summarizeBy: none
+				sourceColumn: _gold_processed_ts
+
+				annotation SummarizationSetBy = Automatic
+
+			column claim_date_key
+				dataType: int64
+				formatString: 0
+				lineageTag: 95b042fe-b837-4f15-a020-d37219cc854a
+				sourceLineageTag: claim_date_key
+				summarizeBy: none
+				sourceColumn: claim_date_key
+
+				annotation SummarizationSetBy = Automatic
+
+			partition fact_claim = entity
+				mode: directLake
+				source
+					entityName: fact_claim
+					schemaName: dbo
+					expressionSource: 'DirectLake - LH_Gold'
+
+		table dim_policy
+			lineageTag: 47255deb-4dd3-4afd-86df-0d8c659e22ba
+			sourceLineageTag: [dbo].[dim_policy]
+
+			measure 'Policy Count' =
+					
+					DISTINCTCOUNT ( dim_policy[policy_id] )
+				formatString: #,0
+				displayFolder: Policies
+				lineageTag: 1c540353-4a90-46a6-8560-76ad510883bd
+
+				changedProperty = Name
+
+				changedProperty = FormatString
+
+				changedProperty = DisplayFolder
+
+			measure 'Total Annual Premium' =
+					
+					SUM ( dim_policy[annual_premium] )
+				formatString: #,0.00
+				displayFolder: Policies
+				lineageTag: 69157623-a53f-47b5-94b6-ca93812f8891
+
+				changedProperty = Name
+
+				changedProperty = FormatString
+
+				changedProperty = DisplayFolder
+
+			measure 'Loss Ratio' =
+					
+					DIVIDE (
+					    [Total Claim Amount],
+					    [Total Annual Premium],
+					    0
+					)
+				formatString: 0.00%;-0.00%;0.00%
+				displayFolder: Policies
+				lineageTag: 66e8591f-7e6a-4aca-b815-652e202dd507
+
+				changedProperty = Name
+
+				changedProperty = FormatString
+
+				changedProperty = DisplayFolder
+
+			measure 'Average Annual Premium' =
+					
+					AVERAGE ( dim_policy[annual_premium] )
+				formatString: #,0.00
+				displayFolder: Policies
+				lineageTag: 43f30dab-3066-4d97-a1e7-84c32efc0478
+
+				changedProperty = Name
+
+				changedProperty = FormatString
+
+				changedProperty = DisplayFolder
+
+			measure 'Claims per Policy' =
+					
+					DIVIDE (
+					    [Claim Count],
+					    [Policy Count],
+					    0
+					)
+				formatString: #,0.00
+				displayFolder: Policies
+				lineageTag: 55ef7231-4110-4525-98b6-8774464d01fb
+
+				changedProperty = Name
+
+				changedProperty = FormatString
+
+				changedProperty = DisplayFolder
+
+			measure 'Active Policy Count' =
+					
+					CALCULATE (
+					    DISTINCTCOUNT ( dim_policy[policy_id] ),
+					    dim_policy[policy_status] = "Active"
+					)
+				formatString: #,0
+				displayFolder: Policies
+				lineageTag: cb9e36c0-5c98-48dd-bfab-225228d2635d
+
+				changedProperty = Name
+
+				changedProperty = FormatString
+
+				changedProperty = DisplayFolder
+
+			column policy_key
+				dataType: int64
+				formatString: 0
+				lineageTag: afe6f39b-69cb-426e-9f57-aeb19d005092
+				sourceLineageTag: policy_key
+				summarizeBy: none
+				sourceColumn: policy_key
+
+				annotation SummarizationSetBy = Automatic
+
+			column policy_id
+				dataType: string
+				lineageTag: a896b58d-d939-4afc-b097-ae30089da2e9
+				sourceLineageTag: policy_id
+				summarizeBy: none
+				sourceColumn: policy_id
+
+				annotation SummarizationSetBy = Automatic
+
+			column customer_key
+				dataType: int64
+				formatString: 0
+				lineageTag: b0970258-1f2e-484d-96a2-3e7f50a856f9
+				sourceLineageTag: customer_key
+				summarizeBy: none
+				sourceColumn: customer_key
+
+				annotation SummarizationSetBy = Automatic
+
+			column customer_id
+				dataType: string
+				lineageTag: ce228835-1b02-4409-98db-a26bf53d3e4f
+				sourceLineageTag: customer_id
+				summarizeBy: none
+				sourceColumn: customer_id
+
+				annotation SummarizationSetBy = Automatic
+
+			column product_type
+				dataType: string
+				lineageTag: 66092da9-81e8-4e60-bba7-4b70789af4ac
+				sourceLineageTag: product_type
+				summarizeBy: none
+				sourceColumn: product_type
+
+				annotation SummarizationSetBy = Automatic
+
+			column policy_start_date
+				dataType: dateTime
+				formatString: General Date
+				lineageTag: 1fa38798-a462-4f90-bb41-8a4755c8ace1
+				sourceLineageTag: policy_start_date
+				summarizeBy: none
+				sourceColumn: policy_start_date
+
+				annotation SummarizationSetBy = Automatic
+
+			column policy_end_date
+				dataType: dateTime
+				formatString: General Date
+				lineageTag: 0e7690ea-89da-471e-8511-a1ba1648204a
+				sourceLineageTag: policy_end_date
+				summarizeBy: none
+				sourceColumn: policy_end_date
+
+				annotation SummarizationSetBy = Automatic
+
+			column annual_premium
+				dataType: double
+				lineageTag: d600a6e1-1f95-4e75-bf07-fd7fed46dc42
+				sourceLineageTag: annual_premium
+				summarizeBy: sum
+				sourceColumn: annual_premium
+
+				annotation SummarizationSetBy = Automatic
+
+				annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+			column coverage_limit
+				dataType: double
+				lineageTag: 2470f698-cdae-45c3-9efa-6259b88d7246
+				sourceLineageTag: coverage_limit
+				summarizeBy: sum
+				sourceColumn: coverage_limit
+
+				annotation SummarizationSetBy = Automatic
+
+				annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+			column deductible
+				dataType: double
+				lineageTag: b2a1405c-8419-4838-8559-bd3fd27a72ea
+				sourceLineageTag: deductible
+				summarizeBy: sum
+				sourceColumn: deductible
+
+				annotation SummarizationSetBy = Automatic
+
+				annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+			column policy_status
+				dataType: string
+				lineageTag: 5e0861e6-e98a-4ee6-b453-5a0bdbbc1696
+				sourceLineageTag: policy_status
+				summarizeBy: none
+				sourceColumn: policy_status
+
+				annotation SummarizationSetBy = Automatic
+
+			column agent_id
+				dataType: string
+				lineageTag: a3c533ff-497c-401d-8458-3c84aa8bd675
+				sourceLineageTag: agent_id
+				summarizeBy: none
+				sourceColumn: agent_id
+
+				annotation SummarizationSetBy = Automatic
+
+			column last_updated
+				dataType: string
+				lineageTag: 875ecf0d-3348-4074-b76f-664a51c7609b
+				sourceLineageTag: last_updated
+				summarizeBy: none
+				sourceColumn: last_updated
+
+				annotation SummarizationSetBy = Automatic
+
+			column _gold_processed_ts
+				dataType: dateTime
+				formatString: General Date
+				lineageTag: 7e75ab7a-2f73-410d-8f90-656cbbed7f14
+				sourceLineageTag: _gold_processed_ts
+				summarizeBy: none
+				sourceColumn: _gold_processed_ts
+
+				annotation SummarizationSetBy = Automatic
+
+			column 'Policy Start Year' =
+					
+					YEAR ( dim_policy[policy_start_date] )
+				formatString: 0
+				lineageTag: 92182b32-4248-4c4c-923d-9769c2401740
+				summarizeBy: sum
+				expressionContext: userContext
+
+				changedProperty = Name
+
+				annotation SummarizationSetBy = Automatic
+
+			partition dim_policy = entity
+				mode: directLake
+				source
+					entityName: dim_policy
+					schemaName: dbo
+					expressionSource: 'DirectLake - LH_Gold'
+
+		table dim_customer
+			lineageTag: fd715800-65ee-49ad-a36c-0e6c64d18a63
+			sourceLineageTag: [dbo].[dim_customer]
+
+			measure 'Customer Count' =
+					
+					DISTINCTCOUNT ( dim_customer[customer_id] )
+				formatString: #,0
+				displayFolder: Customers
+				lineageTag: 0ee3b2db-1a36-4dac-8a7d-a3cd975eb5e4
+
+				changedProperty = Name
+
+				changedProperty = FormatString
+
+				changedProperty = DisplayFolder
+
+			column customer_key
+				dataType: int64
+				formatString: 0
+				lineageTag: 6e0b292f-dac4-4f94-aa3e-ec5e62e478f8
+				sourceLineageTag: customer_key
+				summarizeBy: none
+				sourceColumn: customer_key
+
+				annotation SummarizationSetBy = Automatic
+
+			column customer_id
+				dataType: string
+				lineageTag: 615c25ab-ad1f-4807-a11b-e4d61d14ac89
+				sourceLineageTag: customer_id
+				summarizeBy: none
+				sourceColumn: customer_id
+
+				annotation SummarizationSetBy = Automatic
+
+			column first_name
+				dataType: string
+				lineageTag: 7f4c0e2e-d03a-4035-b738-d4008a70f690
+				sourceLineageTag: first_name
+				summarizeBy: none
+				sourceColumn: first_name
+
+				annotation SummarizationSetBy = Automatic
+
+			column last_name
+				dataType: string
+				lineageTag: 533edc84-4f04-4b8e-bec8-af063a7413bb
+				sourceLineageTag: last_name
+				summarizeBy: none
+				sourceColumn: last_name
+
+				annotation SummarizationSetBy = Automatic
+
+			column date_of_birth
+				dataType: dateTime
+				formatString: General Date
+				lineageTag: 0a89fb24-4c72-408c-a744-89011af065b6
+				sourceLineageTag: date_of_birth
+				summarizeBy: none
+				sourceColumn: date_of_birth
+
+				annotation SummarizationSetBy = Automatic
+
+			column email
+				dataType: string
+				lineageTag: 25f20a06-4290-4724-9fc5-646c7bfb9b27
+				sourceLineageTag: email
+				summarizeBy: none
+				sourceColumn: email
+
+				annotation SummarizationSetBy = Automatic
+
+			column phone
+				dataType: string
+				lineageTag: e1e01c63-8037-46e1-be39-969b5254de06
+				sourceLineageTag: phone
+				summarizeBy: none
+				sourceColumn: phone
+
+				annotation SummarizationSetBy = Automatic
+
+			column address
+				dataType: string
+				lineageTag: dad9bc06-9851-4de5-b6c8-9edac64456ec
+				sourceLineageTag: address
+				summarizeBy: none
+				sourceColumn: address
+
+				annotation SummarizationSetBy = Automatic
+
+			column city
+				dataType: string
+				lineageTag: c1783905-3d08-490e-a61f-0286c02f3a32
+				sourceLineageTag: city
+				summarizeBy: none
+				sourceColumn: city
+
+				annotation SummarizationSetBy = Automatic
+
+			column state
+				dataType: string
+				lineageTag: 2db47b0b-5fb4-498f-96c6-92bc875d6223
+				sourceLineageTag: state
+				summarizeBy: none
+				sourceColumn: state
+
+				annotation SummarizationSetBy = Automatic
+
+			column zip_code
+				dataType: string
+				lineageTag: 24eff81a-35a1-4bdf-a4c2-88b0a32df498
+				sourceLineageTag: zip_code
+				summarizeBy: none
+				sourceColumn: zip_code
+
+				annotation SummarizationSetBy = Automatic
+
+			column customer_status
+				dataType: string
+				lineageTag: d50e671f-4669-4328-aac2-81a8ec656ac0
+				sourceLineageTag: customer_status
+				summarizeBy: none
+				sourceColumn: customer_status
+
+				annotation SummarizationSetBy = Automatic
+
+			column created_date
+				dataType: dateTime
+				formatString: General Date
+				lineageTag: b93c2c15-b0d7-46de-92c5-d8e8da5eb335
+				sourceLineageTag: created_date
+				summarizeBy: none
+				sourceColumn: created_date
+
+				annotation SummarizationSetBy = Automatic
+
+			column _gold_processed_ts
+				dataType: dateTime
+				formatString: General Date
+				lineageTag: 6868ffc8-eaef-4cbc-b2e7-61d1cdbbc80f
+				sourceLineageTag: _gold_processed_ts
+				summarizeBy: none
+				sourceColumn: _gold_processed_ts
+
+				annotation SummarizationSetBy = Automatic
+
+			partition dim_customer = entity
+				mode: directLake
+				source
+					entityName: dim_customer
+					schemaName: dbo
+					expressionSource: 'DirectLake - LH_Gold'
+
+		relationship 509c408d-172c-d1ee-6a54-4619c05a8256
+			fromColumn: dim_policy.customer_key
+			toColumn: dim_customer.customer_key
+
+		relationship acf20e61-3053-c12e-f900-1723288b6422
+			fromColumn: fact_claim.policy_key
+			toColumn: dim_policy.policy_key
+
+		relationship c1db6421-44f1-ead9-b399-abd18ad89fce
+			fromColumn: fact_payment.policy_key
+			toColumn: dim_policy.policy_key
+
+		relationship 6b59d521-36ef-f178-ecda-c7e85b076869
+			fromColumn: fact_claim.claim_date_key
+			toColumn: dim_date.date_key
+
+		relationship 655dd065-c5c4-6d7b-729e-562764887cc4
+			fromColumn: fact_payment.payment_date_key
+			toColumn: dim_date.date_key
+
+		role NY_State_Access
+			modelPermission: read
+
+			tablePermission dim_customer = [state] == "NY"
+
+			annotation PBI_Id = 5d8286429c8a4f839bddc5275a2fd540
+
+		expression 'DirectLake - LH_Gold' =
+				let
+				    Source = AzureStorage.DataLake("https://onelake.dfs.fabric.microsoft.com/129dc335-816e-4c9a-a21a-3ae57869af53/409d33cd-d1a6-4ee9-acc2-589e9cb3b15c", [HierarchicalNavigation=true])
+				in
+				    Source
+			lineageTag: 4507a5f6-ee1a-4254-b573-c7b5e19b06b4
+
+			annotation PBI_IncludeFutureArtifacts = False
+
+		annotation __PBI_TimeIntelligenceEnabled = 1
+
+		annotation PBI_QueryOrder = ["DirectLake - LH_Gold"]
+
+		annotation __LastRPTime = 134320760924827318
+
+		annotation PBI_ProTooling = ["DirectLakeOnOneLakeInWeb","WebModelingEdit"]
+
