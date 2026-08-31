@@ -1365,7 +1365,7 @@ createOrReplace
 
 		expression 'DirectLake - LH_Gold' =
 				let
-				    Source = AzureStorage.DataLake("https://onelake.dfs.fabric.microsoft.com/129dc335-816e-4c9a-a21a-3ae57869af53/409d33cd-d1a6-4ee9-acc2-589e9cb3b15c", [HierarchicalNavigation=true])
+				    Source = AzureStorage.DataLake("https://onelake.dfs.fabric.microsoft.com/00000000-0000-0000-0000-000000000000/00000000-0000-0000-0000-000000000000", [HierarchicalNavigation=true])
 				in
 				    Source
 			lineageTag: 4507a5f6-ee1a-4254-b573-c7b5e19b06b4

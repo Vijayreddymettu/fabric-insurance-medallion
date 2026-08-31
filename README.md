@@ -1,10 +1,35 @@
-
-
 # Microsoft Fabric Insurance Medallion Analytics Platform
 
-*(No public live-demo link — this Fabric trial tenant has "Publish to web" and external sharing disabled at the admin level, outside this account's control. See the embedded screenshots below for direct evidence of the workspace, dashboard, and pipeline execution.)*
+![Platform](https://img.shields.io/badge/Microsoft-Fabric-0078D4?logo=microsoft)
+![Architecture](https://img.shields.io/badge/pattern-Medallion%20(Bronze%E2%86%92Silver%E2%86%92Gold)-b5651d)
+![Engine](https://img.shields.io/badge/compute-Spark%20%2F%20PySpark-E25A1C?logo=apachespark&logoColor=white)
+![Storage](https://img.shields.io/badge/storage-Delta%20Lake%20%2F%20OneLake-00ADD8)
+![Serving](https://img.shields.io/badge/serving-Direct%20Lake%20%2B%20Power%20BI-F2C811?logo=powerbi&logoColor=black)
+![License](https://img.shields.io/badge/license-MIT-green)
 
-End-to-end insurance data engineering and analytics platform built with **Microsoft Fabric**, implementing production-oriented **Bronze → Silver → Gold Medallion Architecture**, incremental processing, Delta Lake, data-quality controls, dimensional modeling, Direct Lake semantic modeling, DAX analytics, row-level security, orchestration, monitoring, and Power BI reporting.
+End-to-end insurance data engineering and analytics platform built with **Microsoft Fabric**, implementing a production-oriented **Bronze → Silver → Gold Medallion Architecture**: incremental processing, Delta Lake, data-quality controls, dimensional modeling, Direct Lake semantic modeling, DAX analytics, row-level security, pipeline orchestration, operational monitoring, and Power BI reporting.
+
+> **No public live-demo link.** This Fabric trial tenant has "Publish to web" and external sharing disabled at the admin level, outside this account's control. The [screenshots](#2a-live-workspace-evidence) below are direct evidence of the workspace, dashboard, and pipeline execution. Workspace and lakehouse GUIDs in the pipeline and semantic-model definitions have been replaced with zero-GUIDs.
+
+---
+
+## Contents
+
+- **Overview** — [Business Scenario](#1-business-scenario) · [End-to-End Architecture](#2-end-to-end-architecture) · [Live Workspace Evidence](#2a-live-workspace-evidence) · [Technology Stack](#3-technology-stack)
+- **Engineering** — [Medallion Data Architecture](#4-medallion-data-architecture) · [Incremental Processing](#5-incremental-processing-framework) · [Delta MERGE & Idempotency](#6-delta-merge-and-idempotency) · [Data Quality Gate](#7-data-quality-gate) · [Referential Integrity](#8-referential-integrity-and-unknown-members) · [Gold Star Schema](#9-gold-star-schema) · [Reconciliation & Audit](#10-reconciliation-audit-and-persistence-validation)
+- **Orchestration** — [Pipeline Orchestration](#11-production-pipeline-orchestration) · [Retry & Timeout Hardening](#12-retry-and-timeout-hardening) · [Scheduling](#13-scheduling) · [Operational Monitoring](#14-operational-monitoring-and-capacity-failure-testing)
+- **Semantic & BI** — [Direct Lake Semantic Model](#15-direct-lake-semantic-model) · [Relationships](#16-semantic-model-relationships) · [DAX Measures](#17-dax-business-measures) · [Time Intelligence](#18-time-intelligence) · [Row-Level Security](#19-row-level-security) · [Power BI Analytics](#20-power-bi-executive-analytics) · [SQL Analytics](#21-sql-analytics)
+- **Reference** — [Repository Structure](#22-repository-structure) · [Key Architecture Decisions](#23-key-architecture-decisions) · [Tested End-to-End](#24-implemented-and-end-to-end-tested) · [Future Enhancements](#25-future-production-enhancements) · [Interview Narrative](#26-interview-architecture-narrative)
+- **Deeper docs** — [`docs/`](docs/README.md) · [`architecture/`](architecture/README.md)
+
+## Reproduce This Project
+
+1. Create a Microsoft Fabric workspace and three Lakehouses: `LH_Bronze`, `LH_Silver`, `LH_Gold`.
+2. Import the notebooks from [`notebooks/`](notebooks/) and bind each to its default Lakehouse.
+3. Import the pipelines from [`pipelines/`](pipelines/) — `PL_Load_Insurance_Data` (ingestion) and `PL_Insurance_Medallion_ETL` (orchestration).
+4. Run `NB_01_ETL_Control_Framework` once to seed the control table, then run `PL_Insurance_Medallion_ETL`.
+5. Deploy [`semantic-model/Insurance_Gold_Semantic_Model.tmdl`](semantic-model/) against `LH_Gold`, repointing the OneLake source to your workspace/lakehouse IDs.
+6. Open the report in [`powerbi/`](powerbi/) and repoint its live connection to your semantic model.
 
 ---
 
@@ -876,4 +901,17 @@ A concise memory pattern for interviews is:
 
 ## Documentation
 
-Additional project documentation is maintained under `docs/`, with architecture material under `architecture/`, implementation artifacts under `notebooks/` and `pipelines/`, semantic-model source under `semantic-model/`, SQL examples under `sql/`, and the Power BI report under `powerbi/`.
+| Area | Location |
+| --- | --- |
+| Deep-dive docs (overview, data flow, design decisions, interview prep) | [`docs/`](docs/README.md) |
+| Architecture diagram and narrative | [`architecture/`](architecture/README.md) |
+| Fabric notebooks (ingestion, incremental, DQ, Gold) | [`notebooks/`](notebooks/) |
+| Data pipeline definitions | [`pipelines/`](pipelines/) |
+| Direct Lake semantic model (TMDL) | [`semantic-model/`](semantic-model/) |
+| SQL analytics examples | [`sql/`](sql/) |
+| Power BI report | [`powerbi/`](powerbi/) |
+| Screenshots / execution evidence | [`screenshots/`](screenshots/) |
+
+## License
+
+Released under the [MIT License](LICENSE).

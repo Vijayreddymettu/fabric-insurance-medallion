@@ -1,0 +1,81 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-artifacts:
+    name: Validate notebooks & pipeline JSON
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Parse every .ipynb and .json
+        run: |
+          python - <<'PY'
+          import json, sys, glob, pathlib
+          bad = []
+          for f in glob.glob("**/*.ipynb", recursive=True) + glob.glob("**/*.json", recursive=True):
+              try:
+                  json.loads(pathlib.Path(f).read_text(encoding="utf-8"))
+              except Exception as e:
+                  bad.append(f"{f}: {e}")
+          if bad:
+              print("Invalid JSON files:")
+              print("\n".join(bad))
+              sys.exit(1)
+          print("All notebook and pipeline JSON files parse cleanly.")
+          PY
+
+      - name: Guard against leaked identifiers
+        run: |
+          python - <<'PY'
+          import re, sys, glob, pathlib
+          # Any real (non-zero) GUID inside a onelake / workspaceId / lakehouse reference
+          pat = re.compile(r'(onelake\.dfs\.fabric\.microsoft\.com/(?!0{8})[0-9a-f]{8}'
+                           r'|"workspaceId"\s*:\s*"(?!0{8})[0-9a-f]{8}'
+                           r'|"default_lakehouse(?:_workspace_id)?"\s*:\s*"(?!0{8}|")[0-9a-f]{8})')
+          hits = []
+          for f in glob.glob("**/*", recursive=True):
+              p = pathlib.Path(f)
+              if p.is_dir() or p.suffix.lower() in {".png", ".jpg", ".pbix", ".docx"}:
+                  continue
+              try:
+                  txt = p.read_text(encoding="utf-8", errors="ignore")
+              except Exception:
+                  continue
+              if pat.search(txt):
+                  hits.append(f)
+          if hits:
+              print("Possible leaked workspace/lakehouse identifiers in:")
+              print("\n".join(hits))
+              sys.exit(1)
+          print("No leaked workspace/lakehouse identifiers found.")
+          PY
+
+  lint-docs:
+    name: Lint & link-check Markdown
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: markdownlint
+        uses: DavidAnson/markdownlint-cli2-action@v19
+        with:
+          globs: "**/*.md"
+
+      - name: Link check
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: "--no-progress --offline --include-fragments '**/*.md'"
+          fail: true

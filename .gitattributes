@@ -1,0 +1,23 @@
+# Normalize line endings for text sources
+*.md        text eol=lf
+*.sql       text eol=lf
+*.json      text eol=lf
+*.tmdl      text eol=lf
+*.yml       text eol=lf
+*.yaml      text eol=lf
+.gitignore  text eol=lf
+.gitattributes text eol=lf
+
+# Notebooks: keep as text, but don't count toward language stats or show in diffs by default
+*.ipynb     text eol=lf linguist-language=Python
+*.ipynb     -diff
+
+# Binary artifacts
+*.pbix      binary
+*.png       binary
+*.jpg       binary
+*.docx      binary
+
+# GitHub Linguist: this is a data/analytics project, not a web app
+docs/**       linguist-documentation
+screenshots/* linguist-vendored
