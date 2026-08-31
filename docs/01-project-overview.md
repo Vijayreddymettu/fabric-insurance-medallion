@@ -1,5 +1,3 @@
-
-
 # Microsoft Fabric Insurance Medallion Platform
 
 ## Project Overview

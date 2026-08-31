@@ -1,5 +1,3 @@
-
-
 Architecture Design Decisions
 
 ## Purpose

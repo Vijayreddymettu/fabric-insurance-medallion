@@ -1,6 +1,3 @@
-
-
-
 # Architecture — Microsoft Fabric Insurance Medallion Platform
 
 ## Overview

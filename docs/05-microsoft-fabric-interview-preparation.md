@@ -1,4 +1,3 @@
-
 # Microsoft Fabric Interview Preparation
 
 ## Purpose

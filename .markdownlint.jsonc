@@ -1,9 +1,15 @@
 {
-  // Portfolio docs favour readability over strict style; disable the noisy rules.
+  // Portfolio / long-form technical docs: keep the mechanical rules, relax the
+  // stylistic ones that conflict with the authored numbered-section structure.
   "default": true,
   "MD013": false, // line length
-  "MD024": { "siblings_only": true }, // duplicate headings allowed across sections
+  "MD024": { "siblings_only": true }, // repeated headings across sibling sections
+  "MD025": false, // numbered sections use multiple top-level headings by design
+  "MD026": false, // trailing ":" in headings (interview-question style)
+  "MD001": false, // heading levels may jump in reference material
   "MD033": false, // inline HTML (badges, <br/> in mermaid)
-  "MD041": false, // first line in file may be a badge block, not H1
-  "MD046": false  // mixed code block styles (fenced + indented)
+  "MD036": false, // emphasis used as a lightweight sub-heading
+  "MD041": false, // first line may be a badge block, not the H1
+  "MD046": false, // mixed fenced + indented code blocks
+  "MD060": false  // table pipe alignment / padding style
 }

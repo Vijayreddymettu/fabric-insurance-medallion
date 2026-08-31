@@ -1,4 +1,3 @@
-
 # Microsoft Fabric Insurance Medallion Platform
 
 # Interview Walkthrough
